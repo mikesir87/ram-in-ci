@@ -9,6 +9,9 @@ CONFIG_DATA="{\"mutators\":[{ \"type\": \"addLabels\", \"labels\": { \"protected
 
 echo "Config data: ${CONFIG_DATA}"
 
+ls -al /var/run
+whoami
+
 mv /var/run/docker.sock /var/run/docker.sock.orig
 
 docker -H unix:///var/run/docker.sock.orig run \
