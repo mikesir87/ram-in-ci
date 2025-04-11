@@ -8,7 +8,7 @@ ALLOWED_REGISTRIES=$(curl "https://hub.docker.com/v2/orgs/${DOCKERHUB_ORG}/setti
 CONFIG_DATA="{\"mutators\":[{ \"type\": \"addLabels\", \"labels\": { \"protected\": \"true\" }}],\"gates\":[{ \"type\": \"registry\", \"registries\": ${ALLOWED_REGISTRIES} }], \"responseFilters\":[{ \"type\": \"labelFilter\", \"requiredLabels\": { \"protected\": \"true\" }}]}"
 
 echo "Config data"
-echo $CONFIG_DATA | jq .
+echo $CONFIG_DATA
 
 mkdir /tmp/docker-socket
 
