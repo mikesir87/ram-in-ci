@@ -7,16 +7,16 @@ ALLOWED_REGISTRIES=$(curl "https://hub.docker.com/v2/orgs/${DOCKERHUB_ORG}/setti
 
 CONFIG_DATA="{\"mutators\":[{ \"type\": \"addLabels\", \"labels\": { \"protected\": \"true\" }}],\"gates\":[{ \"type\": \"registry\", \"registries\": ${ALLOWED_REGISTRIES} }], \"responseFilters\":[{ \"type\": \"labelFilter\", \"requiredLabels\": { \"protected\": \"true\" }}]}"
 
-echo "Config data: ${CONFIG_DATA}"
+echo "Config data"
+echo $CONFIG_DATA | jq .
 
-ls -al /var/run
-whoami
-
-mv /var/run/docker.sock /var/run/docker.sock.orig
+mkdir /tmp/docker-socket
 
 docker -H unix:///var/run/docker.sock.orig run \
-    -dv /var/run:/var/run \
-    -e LISTEN_SOCKET_PATH=/var/run/docker.sock \
     -e CONFIG_DATA="${CONFIG_DATA}" \
-    -e FORWARDING_SOCKET_PATH=/var/run/docker.sock.orig \
+    -dv /var/run/docker.sock:/var/run/docker.sock \
+    -v /tmp/docker-socket:/tmp/docker-socket \
+    -e LISTEN_SOCKET_PATH=/tmp/docker-socket/docker.sock \
     mikesir87/docker-socket-proxy
+
+echo "DOCKER_HOST=unix:///tmp/docker-socket/docker.sock" >> $GITHUB_ENV
