@@ -21,3 +21,8 @@ docker run \
     mikesir87/docker-socket-proxy
 
 echo "DOCKER_HOST=unix:///tmp/docker-socket/docker.sock" >> $GITHUB_ENV
+
+sleep 5
+CONTAINER_ID=$(docker ps -aq --filter ancestor=mikesir87/docker-socket-proxy)
+echo "Container ID: $CONTAINER_ID"
+docker logs $CONTAINER_ID
