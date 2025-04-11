@@ -12,7 +12,7 @@ echo $CONFIG_DATA
 
 mkdir /tmp/docker-socket
 
-docker -H unix:///var/run/docker.sock.orig run \
+docker run \
     -e CONFIG_DATA="${CONFIG_DATA}" \
     -dv /var/run/docker.sock:/var/run/docker.sock \
     -v /tmp/docker-socket:/tmp/docker-socket \
